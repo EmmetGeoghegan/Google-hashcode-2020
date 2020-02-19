@@ -8,6 +8,7 @@ def importdata(filename):
         batch_size = int(lines[0].strip("\n").split(" ")[1])
 
         pizzas = lines[1].strip("\n").split(" ")
+
         pizzas = [int(i) for i in pizzas]
     return target, batch_size, pizzas
 
@@ -51,7 +52,7 @@ print("----")
 
 
 def recur_sum(pizzas, target, sel_p=[]):
-    cus_score = 250554555    # D cus  - 250554555
+    # cus_score = 250554555    # D cus  - 250554555
     # cus_score = 8090664    # E cus score - 8090664
     global best_selec
     curr_sum = sum([i.slices for i in sel_p])
@@ -76,7 +77,6 @@ def recur_sum(pizzas, target, sel_p=[]):
 
 recur_sum(pizzas, target)
 print("Best Soln Found")
-
 
 
 # New algo
