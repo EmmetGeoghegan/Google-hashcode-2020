@@ -21,29 +21,24 @@ def createoutputfile(Album, filename="sub.txt"):
             outputfile.write(" ".join([str(x.id) for x in i.images])+"\n")
 
 
-def scoring_function(album):
-    # get length of album
-    leader = 1
-    follower = 0
-    album_score = []
-    while leader < len(album):
-        page1 = album[follower]
-        page2 = album[leader]
-
-        # check intersection
-        inter_score = len(page1.tags.intersection(page2.tags))
-
-        # check page1 comp
-        page1_comp = len(page1.tags.difference(page2.tags))
-
-        # check page2 comp
-        page2_comp = len(page2.tags.difference(page2.tags))
-        album_score.append(min([inter_score, page1_comp, page2_comp]))
-
-    score = sum(album_score)
-    return score
+def divide_list(my_list, n=2):
+    output = [my_list[i * n:(i + 1) * n] for i in range((len(my_list) + n - 1) // n )]
+    return output
 
 
+# Create all our image objects
 importdata("a_example.txt")
-for i in c.Image.all_images:
-    print(i)
+
+# Create a slide from every horizontal image
+for i in c.Image.all_horizontals:
+    c.Slide([i])
+
+
+test = divide_list(c.Image.all_verticals)
+
+for i in test:
+    c.Slide(i)
+
+test_album = c.Album(c.Slide.all_slides)
+print(test_album.score)
+print(test_album)
