@@ -64,19 +64,19 @@ class Album:
         while leader < len(self.slides):
             page1 = self.slides[follower]
             page2 = self.slides[leader]
-            print(page1.tags)
-            print(page2.tags)
+            # print(page1.tags)
+            # print(page2.tags)
 
             # check intersection
             inter_score = len(page1.tags.intersection(page2.tags))
-            print(f"inter: {inter_score}")
+            # print(f"inter: {inter_score}")
             # check page1 comp
             page1_comp = len(page1.tags.difference(page2.tags))
-            print(f"page1_comp: {page1_comp}")
+            # print(f"page1_comp: {page1_comp}")
 
             # check page2 comp
-            page2_comp = len(page2.tags.difference(page2.tags))
-            print(f"page2_comp: {page2_comp}")
+            page2_comp = len(page2.tags.difference(page1.tags))
+            # print(f"page2_comp: {page2_comp}")
 
             album_score.append(min([inter_score, page1_comp, page2_comp]))
 

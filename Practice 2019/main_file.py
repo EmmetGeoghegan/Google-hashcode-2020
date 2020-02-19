@@ -40,5 +40,5 @@ for i in test:
     c.Slide(i)
 
 test_album = c.Album(c.Slide.all_slides)
-print(test_album.score)
-print(test_album)
+print(f"Score:{test_album.score}")
+# print(test_album)
