@@ -71,19 +71,25 @@ def libo_is_signed_up():
 def send_books(library):
     # book_locations = get_book_location_dict()
     if library.available_books:
-        while True:
+        loop = True
+        while loop is True:
             if library.available_books:
-                selected_book = library.available_books.pop()
+                print("sorting")
+                sorted_books = sorted(library.available_books, key=lambda x: x.value)
+                print("sorting")
+
+                selected_book = sorted_books.pop()
+                print(selected_book.shipped)
                 if selected_book.shipped:
+                    loop = False
                     pass
                 else:
                     selected_book.shipped = True
-                    break
+                    loop = False
         library.scanned_books.append(selected_book)
 
 
-# filename = "b_read_on.txt"
-# filename = "a_example.txt"
+filename = "b_read_on.txt"
 # filename = "c_incunabula.txt"
 # filename = "d_tough_choices.txt"
 # filename = "e_so_many_books.txt"
@@ -102,10 +108,11 @@ sign_up_start_day = 0
 sign_up_time = 999
 
 while time_step < time_limit + 1:
-    print("--------------")
-    print(time_step, Signing_up)
-    print(len(Library.all_librarys), len(Library.signed_up_libos), len(Library.singing_up_libos))
-    print("--------------")
+    print(time_step)
+    # print("--------------")
+    # print(time_step, Signing_up)
+    # print(len(Library.all_librarys), len(Library.signed_up_libos), len(Library.singing_up_libos))
+    # print("--------------")
     shipping_libos = Library.signed_up_libos
     if Signing_up is False:
         sign_up_time = sign_up_library()
