@@ -1,7 +1,6 @@
 
 class Book:
     all_books = []
-    shipped_books = []
 
     def __init__(self, id, value):
         self.id = id
@@ -33,15 +32,7 @@ class Library:
         output = []
         for i in booklist:
             output.append(Book.all_books[i])
-
         return output
-
-    def shipped_book(self, book):
-        try:
-            self.available_books.remove(book)
-        except:
-            pass
-            # print(f"book{book} not in {self.available_books}")
 
     def __repr__(self):
         return str(self.id)

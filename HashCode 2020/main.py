@@ -46,7 +46,7 @@ def ship_book(book):
 ###################
 def sign_up_library():
     sorted_libos = sorted(Library.all_librarys, key=lambda x: (x.signup_time, len(x.available_books)))
-    if Library.all_librarys != []:
+    if Library.all_librarys:
         chosen_libo = sorted_libos.pop()
         Library.all_librarys.remove(chosen_libo)
         Library.singing_up_libos.append(chosen_libo)
@@ -54,17 +54,19 @@ def sign_up_library():
     return 0
 
 
+#########################
 def libo_is_signed_up():
-    if Library.singing_up_libos != []:
+    if Library.singing_up_libos:
         libo = Library.singing_up_libos.pop()
         Library.signed_up_libos.append(libo)
 
 
+##########################
 def send_books(library):
     # book_locations = get_book_location_dict()
-    if not library.available_books:
+    if library.available_books:
         while True:
-            if not library.available_books:
+            if library.available_books:
                 selected_book = library.available_books.pop()
                 if selected_book.shipped:
                     pass
@@ -72,19 +74,14 @@ def send_books(library):
                     selected_book.shipped = True
                     break
         library.scanned_books.append(selected_book)
-        Book.shipped_books.append(selected_book)
-
-        for i in Library.all_librarys:
-            i.shipped_book(selected_book)
-        # print(f"shipped: {selected_book}")
 
 
 filename = "a_example.txt"
 filename = "b_read_on.txt"
-filename = "c_incunabula.txt"
-# filename = "d_tough_choices.txt"
-filename = "e_so_many_books.txt"
-filename = "f_libraries_of_the_world.txt"
+# filename = "c_incunabula.txt"
+# # filename = "d_tough_choices.txt"
+# filename = "e_so_many_books.txt"
+# filename = "f_libraries_of_the_world.txt"
 
 
 time_limit = importdata(filename)
@@ -110,7 +107,7 @@ while time_step < time_limit + 1:
         # print(f"done signeing up day: {time_step}")
         Signing_up = False
 
-    for i in Library.signed_up_libos:
+    for i in shipping_libos:
         send_books(i)
     time_step += 1
 
