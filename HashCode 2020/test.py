@@ -1,10 +1,3 @@
 list = [1,2,3]
-print(list)
-list.pop()
-print(list)
-list.pop()
-print(list)
-list.pop()
-print(list)
-list.pop()
-print(list)
+sorted_libos = sorted(list, key=lambda x: -x)
+print(sorted_libos)

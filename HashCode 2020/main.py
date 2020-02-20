@@ -43,8 +43,8 @@ def ship_book(book):
         i.shipped_book(book)
 
 
+###################
 def sign_up_library():
-    # book_locations = get_book_location_dict()
     sorted_libos = sorted(Library.all_librarys, key=lambda x: (x.signup_time, len(x.available_books)))
     if Library.all_librarys != []:
         chosen_libo = sorted_libos.pop()
@@ -62,14 +62,15 @@ def libo_is_signed_up():
 
 def send_books(library):
     # book_locations = get_book_location_dict()
-    if library.available_books != []:
+    if not library.available_books:
         while True:
-            selected_book = library.available_books.pop()
-            if selected_book.shipped:
-                pass
-            else:
-                selected_book.shipped = True
-                break
+            if not library.available_books:
+                selected_book = library.available_books.pop()
+                if selected_book.shipped:
+                    pass
+                else:
+                    selected_book.shipped = True
+                    break
         library.scanned_books.append(selected_book)
         Book.shipped_books.append(selected_book)
 
@@ -80,10 +81,10 @@ def send_books(library):
 
 filename = "a_example.txt"
 filename = "b_read_on.txt"
-# filename = "c_incunabula.txt"
+filename = "c_incunabula.txt"
 # filename = "d_tough_choices.txt"
-# filename = "e_so_many_books.txt"
-# filename = "f_libraries_of_the_world.txt"
+filename = "e_so_many_books.txt"
+filename = "f_libraries_of_the_world.txt"
 
 
 time_limit = importdata(filename)
