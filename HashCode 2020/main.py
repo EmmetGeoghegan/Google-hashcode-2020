@@ -5,44 +5,23 @@ import time
 def importdata(filename):
     with open(f"./inputdata/{filename}") as inputfile:
         lines = inputfile.readlines()
-
-        # book_count = int(lines[0].strip("\n").split(" ")[0])
         library_count = int(lines[0].strip("\n").split(" ")[1])
         available_days = int(lines[0].strip("\n").split(" ")[2])
-
         book_scores = lines[1].strip("\n").split(" ")
         book_scores = [int(i) for i in book_scores]
-
-        # print(book_count)
-        # print(library_count)
-        # print(available_days)
-        # print(book_scores)
-
         # Create our books
         for id, value in enumerate(book_scores):
             Book(id, value)
-
         lib_id = 0
+        # Create librarys
         for i in range(2, 4 + library_count, 2):
             first_line = lines[i].strip("\n").split(" ")
             second_line = lines[i+1].strip("\n").split(" ")
-
             signup_time = int(first_line[1])
             b_per_day = int(first_line[2])
-
             available_books = list(set([int(i) for i in second_line]))
-            # print("---------")
-            # print(lib_id)
-            # print(book_count)
-            # print(signup_time)
-            # print(b_per_day)
-            # print(available_books)
-            # print("---------")
-
             Library(lib_id, signup_time, b_per_day, available_books)
-
             lib_id += 1
-
     return available_days
 
 
@@ -84,7 +63,13 @@ def libo_is_signed_up():
 def send_books(library):
     # book_locations = get_book_location_dict()
     if library.available_books != []:
-        selected_book = library.available_books.pop()
+        while True:
+            selected_book = library.available_books.pop()
+            if selected_book.shipped:
+                pass
+            else:
+                selected_book.shipped = True
+                break
         library.scanned_books.append(selected_book)
         Book.shipped_books.append(selected_book)
 
@@ -93,11 +78,11 @@ def send_books(library):
         # print(f"shipped: {selected_book}")
 
 
-# filename = "a_example.txt"
-# filename = "b_read_on.txt"
+filename = "a_example.txt"
+filename = "b_read_on.txt"
 # filename = "c_incunabula.txt"
-filename = "d_tough_choices.txt"
-filename = "e_so_many_books.txt"
+# filename = "d_tough_choices.txt"
+# filename = "e_so_many_books.txt"
 # filename = "f_libraries_of_the_world.txt"
 
 
