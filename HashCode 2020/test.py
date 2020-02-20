@@ -1,0 +1,10 @@
+list = [1,2,3]
+print(list)
+list.pop()
+print(list)
+list.pop()
+print(list)
+list.pop()
+print(list)
+list.pop()
+print(list)
