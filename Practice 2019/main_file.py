@@ -3,7 +3,7 @@ from classes import classes as c
 
 
 def importdata(filename):
-    with open(f"./input/{filename}") as inputfile:
+    with open(f"./input/{filename}", "r") as inputfile:
         lines = inputfile.readlines()
         for id, i in enumerate(lines[1:]):
             i = i.split(" ")
@@ -27,7 +27,12 @@ def divide_list(my_list, n=2):
 
 
 # Create all our image objects
-importdata("a_example.txt")
+# importdata("a_example.txt")                   # 2
+# importdata("b_lovely_landscapes.txt")         # 12
+# importdata("c_memorable_moments.txt")         # 152
+# importdata("d_pet_pictures.txt")              # 190961
+# importdata("e_shiny_selfies.txt")             # 112468
+
 
 # Create a slide from every horizontal image
 for i in c.Image.all_horizontals:
