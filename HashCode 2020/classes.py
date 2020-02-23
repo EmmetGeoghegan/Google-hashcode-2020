@@ -9,13 +9,13 @@ class Book:
         self.shipped = False
 
     def __repr__(self):
-        # return f"BookID: {self.id} Book_Val: {self.value}"
         return f"BookID: {self.id}"
 
 
 class Library:
     all_librarys = []
-    singing_up_libos = []
+    unsigned_libos = []
+    signing_up_libos = []
     signed_up_libos = []
 
     def __init__(self, id, signup_time, b_per_day, available_books):
@@ -27,6 +27,7 @@ class Library:
         self.useful_books = []
 
         Library.all_librarys.append(self)
+        Library.unsigned_libos.append(self)
 
     def create_books(self, booklist):
         output = []

@@ -1,7 +1,8 @@
 from classes import Library, Book
-import time
+from tqdm import tqdm
 
 
+# Import all data from the input file
 def importdata(filename):
     with open(f"./inputdata/{filename}") as inputfile:
         lines = inputfile.readlines()
@@ -25,6 +26,7 @@ def importdata(filename):
     return available_days
 
 
+# Book lookup tables to find what librarys a book is in
 def get_book_location_dict():
     book_locations = dict()
     for i in Library.all_librarys:
@@ -37,111 +39,108 @@ def get_book_location_dict():
     return book_locations
 
 
-def ship_book(book):
-    Book.shipped_books.append(book)
-    for i in Library.all_librarys:
-        i.shipped_book(book)
-
-
-###################
+# Choose a library to sign up
 def sign_up_library():
     sorted_libos = sorted(Library.all_librarys, key=lambda x: (-x.signup_time, len(x.available_books)))
     if Library.all_librarys:
-        # input()
         chosen_libo = sorted_libos.pop()
-        # print(chosen_libo)
-        # print(len(Library.all_librarys))
         Library.all_librarys.remove(chosen_libo)
-        # print(len(Library.all_librarys))
-        Library.singing_up_libos.append(chosen_libo)
-        # print(Library.singing_up_libos)
-        # input()
+        Library.signing_up_libos.append(chosen_libo)
         return chosen_libo.signup_time
     return 0
 
 
-#########################
+# Library has finished signing up. Add it to the singed up librarys
 def libo_is_signed_up():
-    if Library.singing_up_libos:
-        libo = Library.singing_up_libos.pop()
+    if Library.signing_up_libos:
+        libo = Library.signing_up_libos.pop()
         Library.signed_up_libos.append(libo)
 
 
-##########################
+# Send a book to Google
 def send_books(library):
-    # print("enter")
     # book_locations = get_book_location_dict()
     if library.available_books:
         loop = True
         sorted_books = sorted(library.available_books, key=lambda x: x.value)
         while loop is True:
             if library.available_books:
-                # print("sorting")
-                # print("sorting")
                 if not sorted_books:
                     break
                 else:
                     selected_book = sorted_books.pop()
-                # print(selected_book.shipped)
-                # print(selected_book)
                 if selected_book.shipped is True:
-                    # input("IF")
                     pass
                 else:
-                    # input("ELSE")
                     selected_book.shipped = True
                     loop = False
-        # input("WE ESCAPED")
         library.scanned_books.append(selected_book)
 
 
-filename = "b_read_on.txt"
-filename = "c_incunabula.txt"
-filename = "d_tough_choices.txt"
-# filename = "e_so_many_books.txt"
-# filename = "f_libraries_of_the_world.txt"
+def algorithm(filename):
+    time_limit = importdata(filename)
+    time_step = 0
+    Signing_up = False
+    sign_up_start_day = 0
+    sign_up_time = 999
+
+    pbar = tqdm(total=time_limit)
+    while time_step < time_limit + 1:
+        shipping_libos = Library.signed_up_libos
+        if Signing_up is False:
+            sign_up_time = sign_up_library()
+            sign_up_start_day = time_step
+            Signing_up = True
+        if sign_up_start_day + sign_up_time == time_step:
+            libo_is_signed_up()
+            Signing_up = False
+
+        for i in shipping_libos:
+            send_books(i)
+        time_step += 1
+        pbar.update(1)
+    pbar.close()
+    createoutputfile(Library, Book, filename, scoring_func())
 
 
-time_limit = importdata(filename)
-# input()
-# for i in Library.all_librarys:
-#     print(i)
-# input()
-
-time_step = 0
-Signing_up = False
-sign_up_start_day = 0
-sign_up_time = 999
-
-while time_step < time_limit + 1:
-    # print(time_step)
-    # print("--------------")
-    # print(time_step, Signing_up)
-    # print(len(Library.all_librarys), len(Library.signed_up_libos), len(Library.singing_up_libos))
-    # print("--------------")
-    shipping_libos = Library.signed_up_libos
-    if Signing_up is False:
-        sign_up_time = sign_up_library()
-        # print(f"signed up libo time = {sign_up_time}")
-        sign_up_start_day = time_step
-        Signing_up = True
-    if sign_up_start_day + sign_up_time == time_step:
-        libo_is_signed_up()
-        # print(f"done signeing up day: {time_step}")
-        Signing_up = False
-
-    for i in shipping_libos:
-        send_books(i)
-    time_step += 1
-
-
-def createoutputfile(Library_class, Book_class, filename="sub.txt"):
-    timestamp = str(time.time()).replace(".", "")
-    with open(f"./submission/{timestamp}{filename}", "w+") as outputfile:
+def createoutputfile(Library_class, Book_class, filename, score):
+    with open(f"./submission/{score}__{filename.split('_')[0]}_sub.txt", "w+") as outputfile:
         outputfile.write(str(len(Library_class.signed_up_libos))+"\n")
         for i in Library_class.signed_up_libos:
             outputfile.write(f"{i.id} {len(i.scanned_books)}"+"\n")
             outputfile.write(" ".join([str(i.id) for i in i.scanned_books])+"\n")
 
 
-createoutputfile(Library, Book, filename)
+def scoring_func():
+    return 0
+    # TODO make a scoring function to evaluate on the fly
+
+
+def main():
+    all_files = []
+    all_files.append("a_example.txt")
+    all_files.append("b_read_on.txt")
+    all_files.append("c_incunabula.txt")
+    all_files.append("d_tough_choices.txt")
+    all_files.append("e_so_many_books.txt")
+    all_files.append("f_libraries_of_the_world.txt")
+    for filename in all_files:
+        print(f"Running {filename}")
+        algorithm(filename)
+        print("Done")
+        print("---------------------------------")
+        wipe_environment()
+
+
+def wipe_environment():
+    Library.all_librarys = []
+    Library.unsigned_libos = []
+    Library.signing_up_libos = []
+    Library.signed_up_libos = []
+    Book.all_books = []
+    Book.unshipped_books = []
+    Book.shipped_books = []
+
+
+if __name__ == '__main__':
+    main()
