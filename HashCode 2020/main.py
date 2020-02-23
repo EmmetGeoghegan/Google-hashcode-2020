@@ -69,31 +69,37 @@ def libo_is_signed_up():
 
 ##########################
 def send_books(library):
+    # print("enter")
     # book_locations = get_book_location_dict()
     if library.available_books:
         loop = True
+        sorted_books = sorted(library.available_books, key=lambda x: x.value)
         while loop is True:
             if library.available_books:
-                print("sorting")
-                sorted_books = sorted(library.available_books, key=lambda x: x.value)
-                print("sorting")
-
-                selected_book = sorted_books.pop()
-                print(selected_book.shipped)
-                if selected_book.shipped:
-                    loop = False
+                # print("sorting")
+                # print("sorting")
+                if not sorted_books:
+                    break
+                else:
+                    selected_book = sorted_books.pop()
+                # print(selected_book.shipped)
+                # print(selected_book)
+                if selected_book.shipped is True:
+                    # input("IF")
                     pass
                 else:
+                    # input("ELSE")
                     selected_book.shipped = True
                     loop = False
+        # input("WE ESCAPED")
         library.scanned_books.append(selected_book)
 
 
 filename = "b_read_on.txt"
-# filename = "c_incunabula.txt"
-# filename = "d_tough_choices.txt"
+filename = "c_incunabula.txt"
+filename = "d_tough_choices.txt"
 # filename = "e_so_many_books.txt"
-filename = "f_libraries_of_the_world.txt"
+# filename = "f_libraries_of_the_world.txt"
 
 
 time_limit = importdata(filename)
@@ -108,7 +114,7 @@ sign_up_start_day = 0
 sign_up_time = 999
 
 while time_step < time_limit + 1:
-    print(time_step)
+    # print(time_step)
     # print("--------------")
     # print(time_step, Signing_up)
     # print(len(Library.all_librarys), len(Library.signed_up_libos), len(Library.singing_up_libos))
