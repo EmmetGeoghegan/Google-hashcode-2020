@@ -63,18 +63,30 @@ def send_books(library):
     if library.available_books:
         loop = True
         sorted_books = sorted(library.available_books, key=lambda x: x.value)
+        # print("first", sorted_books)
         while loop is True:
             if library.available_books:
                 if not sorted_books:
                     break
                 else:
                     selected_book = sorted_books.pop()
+                library.available_books.remove(selected_book)
+                # print(selected_book, selected_book.shipped)
                 if selected_book.shipped is True:
                     pass
                 else:
+                    library.scanned_books.append(selected_book)
                     selected_book.shipped = True
                     loop = False
-        library.scanned_books.append(selected_book)
+            else:
+                loop = False
+        # print("selected book :", selected_book)
+        # print(library.available_books)
+        # print(library.scanned_books)
+        # print("--------- DONE LOOO{P}")
+        # input()
+    else:
+        print("Libo has no books")
 
 
 def algorithm(filename):
