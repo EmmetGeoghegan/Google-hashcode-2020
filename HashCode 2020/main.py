@@ -86,7 +86,8 @@ def send_books(library):
         # print("--------- DONE LOOO{P}")
         # input()
     else:
-        print("Libo has no books")
+        pass
+        # print("Libo has no books")
 
 
 def algorithm(filename):
@@ -116,9 +117,15 @@ def algorithm(filename):
 
 
 def createoutputfile(Library_class, Book_class, filename, score):
+    # remove libos that shipped nothing
+    all_signed_up = Library_class.signed_up_libos
+    good_libos = []
+    for i in all_signed_up:
+        if i.scanned_books:
+            good_libos.append(i)
     with open(f"./submission/{score}__{filename.split('_')[0]}_sub.txt", "w+") as outputfile:
-        outputfile.write(str(len(Library_class.signed_up_libos))+"\n")
-        for i in Library_class.signed_up_libos:
+        outputfile.write(str(len(good_libos))+"\n")
+        for i in good_libos:
             outputfile.write(f"{i.id} {len(i.scanned_books)}"+"\n")
             outputfile.write(" ".join([str(i.id) for i in i.scanned_books])+"\n")
 
